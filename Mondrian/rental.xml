@@ -1,0 +1,68 @@
+<Schema name="New Schema1">
+  <Dimension type="StandardDimension" visible="true" highCardinality="false" name="Customer">
+    <Hierarchy name="Customer" visible="true" hasAll="true" allMemberName="Semua Customer" primaryKey="sk_customer">
+      <Table name="dim_customer" schema="dwh">
+      </Table>
+      <Level name="Customer" visible="true" column="customer_id" nameColumn="cutomer_name" ordinalColumn="customer_id" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="IfBlankName">
+      </Level>
+      <Level name="City" visible="true" column="customer_city_id" nameColumn="customer_city" ordinalColumn="customer_city_id" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="IfBlankName">
+      </Level>
+      <Level name="Country" visible="true" column="customer_country_id" nameColumn="customer_country" ordinalColumn="customer_country_id" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="IfBlankName">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension type="TimeDimension" visible="true" highCardinality="false" name="Date">
+    <Hierarchy name="Waktu" visible="true" hasAll="true" allMemberName="Semua Waktu" primaryKey="sk_waktu">
+      <Table name="dim_date" schema="dwh">
+      </Table>
+      <Level name="Tahun" visible="true" column="tahun_angka" type="Numeric" uniqueMembers="false" levelType="TimeYears" hideMemberIf="IfBlankName">
+      </Level>
+      <Level name="Bulan" visible="true" column="bulan" type="String" uniqueMembers="false" levelType="TimeMonths" hideMemberIf="IfBlankName">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension type="StandardDimension" visible="true" highCardinality="false" name="Category">
+    <Hierarchy name="Genre" visible="true" hasAll="true" allMemberName="Semua Genre" primaryKey="sk_category">
+      <Table name="dim_category" schema="dwh">
+      </Table>
+      <Level name="Category" visible="true" column="category_id" nameColumn="category_name" ordinalColumn="category_id" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="IfBlankName">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension type="StandardDimension" visible="true" highCardinality="false" name="Film">
+    <Hierarchy name="Film" visible="true" hasAll="true" allMemberName="Semua Film" primaryKey="sk_film">
+      <Table name="dim_film" schema="dwh">
+      </Table>
+      <Level name="Film" visible="true" column="film_id" nameColumn="film_title" ordinalColumn="film_id" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="IfBlankName">
+      </Level>
+      <Level name="Tahun Film" visible="true" column="film_id" nameColumn="film_year" ordinalColumn="film_id" type="Numeric" uniqueMembers="false" levelType="Regular" hideMemberIf="IfBlankName">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension type="StandardDimension" visible="true" name="Actor">
+    <Hierarchy name="Actor" visible="true" hasAll="true" allMemberName="Semua Actor" primaryKey="sk_actor">
+      <Table name="dim_actor" schema="dwh" alias="">
+      </Table>
+      <Level name="Actor" visible="true" column="actor_id" nameColumn="actor_name" ordinalColumn="actor_id" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="IfBlankName">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Cube name="Rental" visible="true" cache="true" enabled="true">
+    <Table name="fact_rental" schema="dwh">
+    </Table>
+    <DimensionUsage source="Customer" name="Customer" visible="true" foreignKey="sk_customer" highCardinality="false">
+    </DimensionUsage>
+    <DimensionUsage source="Date" name="Date" visible="true" foreignKey="sk_rental_date" highCardinality="false">
+    </DimensionUsage>
+    <DimensionUsage source="Category" name="Category" visible="true" foreignKey="sk_category" highCardinality="false">
+    </DimensionUsage>
+    <DimensionUsage source="Film" name="Film" visible="true" foreignKey="sk_film" highCardinality="false">
+    </DimensionUsage>
+    <DimensionUsage source="Actor" name="Actor" visible="true" foreignKey="sk_actor">
+    </DimensionUsage>
+    <Measure name="Total Transaksi" column="trx_id" aggregator="count" visible="true">
+    </Measure>
+    <Measure name="Total Pendapatan" column="amount" datatype="Numeric" aggregator="sum" visible="true">
+    </Measure>
+  </Cube>
+</Schema>
